@@ -67,12 +67,15 @@ def main():
         for i in xrange(dsmVersionMin,dsmVersionMax):
             filename = 'DSM_' + model + '_' + str(i) + '.pat'
             if checkURL(dlPath + dsmFolder + filename):
+                dsmVersion = i
                 urllib.urlretrieve(dlPath + dsmFolder + filename, filename)
-                print 'DSM version has been found: ' + str(i)
-                pushOver(PO_api, PO_key, 'DSM version has been found', 'Version: ' + str(i) + '.')
-                sys.exit(0)
-        print 'DSM version not found. Next try in ' + str(interval) + ' seconds.'
-        sleep(interval)
+                print 'DSM version has been found: ' + str(dsmVersion)
+                pushOver(PO_api, PO_key, 'DSM version has been found',
+                    'Version: ' + str(dsmVersion) + ' has been downloaded!')
+                break
+        if not dsmVersion:
+            print 'DSM version not found. Next try in ' + str(interval) + ' seconds.'
+            sleep(interval)
 
 if __name__ == '__main__':
     main()
